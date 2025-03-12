@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="row">
+                <!-- Lado izquierdo - Imagen/Información -->
+                <div class="col-md-6 left-side">
+                    <div class="brand-info">
+                        <div class="logo">
+                            <img src="https://via.placeholder.com/80" alt="Logo">
+                        </div>
+                        <h2>Bienvenido a nuestra plataforma</h2>
+                        <p>Conectando negocios y clientes de manera eficiente</p>
+                    </div>
+                </div>
+                
+                <!-- Lado derecho - Formularios -->
+                <div class="col-md-6 right-side">
+                    <div class="form-container">
+                        <!-- Pestañas de navegación -->
+                        <div class="nav-tabs">
+                            <div class="tab-option active" id="login-tab">Iniciar Sesión</div>
+                            <div class="tab-option" id="register-tab">Registrarse</div>
+                        </div>
+                        
+                        <!-- Tipo de usuario (solo visible en registro) -->
+                        <div class="user-type-selector" style="display: none;">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn user-type-btn active" id="client-btn">Cliente</button>
+                                <button type="button" class="btn user-type-btn" id="business-btn">Negocio</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Formulario de inicio de sesión -->
+                        <form id="login-form" class="active-form">
+                            <h3>Iniciar Sesión</h3>
+                            <div class="mb-3">
+                                <label for="login-email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="login-email" required>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label for="login-password" class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="login-password" required>
+                                    <button class="btn toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="remember-me">
+                                <label class="form-check-label" for="remember-me">Recordarme</label>
+                                <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                        </form>
+                        
+                        <!-- Formulario de registro de cliente -->
+                        <form id="client-register-form" style="display: none;">
+                            <h3>Registro de Cliente</h3>
+                            <div class="mb-3">
+                                <label for="client-name" class="form-label">Nombre(s)</label>
+                                <input type="text" class="form-control" id="client-name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="client-email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="client-email" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un correo electrónico válido.
+                                </div>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label for="client-password" class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="client-password" required>
+                                    <button class="btn toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <span class="strength-label">Fuerza de contraseña:</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <ul class="password-requirements">
+                                        <li id="length-check"><span class="check-icon">✓</span> Mínimo 8 caracteres</li>
+                                        <li id="uppercase-check"><span class="check-icon">✓</span> Al menos una mayúscula</li>
+                                        <li id="lowercase-check"><span class="check-icon">✓</span> Al menos una minúscula</li>
+                                        <li id="number-check"><span class="check-icon">✓</span> Al menos un número</li>
+                                        <li id="special-check"><span class="check-icon">✓</span> Al menos un carácter especial</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label for="client-confirm-password" class="form-label">Confirmar contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="client-confirm-password" required>
+                                    <button class="btn toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Las contraseñas no coinciden.
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="client-terms" required>
+                                <label class="form-check-label" for="client-terms">Acepto los <a href="#">términos y condiciones</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                        </form>
+                        
+                        <!-- Formulario de registro de negocio - Página 1 -->
+                        <form id="business-register-form-page1" style="display: none;">
+                            <h3>Registro de Negocio</h3>
+                            <div class="step-indicator">
+                                <span class="step active">1</span>
+                                <span class="step-line"></span>
+                                <span class="step">2</span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="business-name" class="form-label">Nombre del Negocio</label>
+                                <input type="text" class="form-control" id="business-name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="business-type" class="form-label">Tipo de Negocio</label>
+                                <select class="form-select" id="business-type" required>
+                                    <option value="" selected disabled>Selecciona un tipo</option>
+                                    <option value="online">Venta minorista en línea</option>
+                                    <option value="local">Tienda local</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="business-website" class="form-label">Dirección Web (opcional)</label>
+                                <input type="url" class="form-control" id="business-website">
+                            </div>
+                            <div class="mb-3">
+                                <label for="business-category" class="form-label">Categoría</label>
+                                <select class="form-select" id="business-category" required>
+                                    <option value="" selected disabled>Selecciona una categoría</option>
+                                    <option value="aluminio">Venta de aluminio</option>
+                                    <option value="herreria">Herrería y soldadura</option>
+                                    <option value="madera">Venta de madera y carpintería</option>
+                                    <option value="electricos">Materiales eléctricos y ferretería</option>
+                                    <option value="construccion">Cemento, arena y grava</option>
+                                    <option value="plomeria">Servicio de plomería</option>
+                                    <option value="electrodomesticos">Reparación de electrodomésticos</option>
+                                    <option value="cerrajeria">Cerrajería</option>
+                                    <option value="jardineria">Jardinería</option>
+                                    <option value="pintura">Pintura y decoración</option>
+                                    <option value="abarrotes">Tiendas de abarrotes</option>
+                                    <option value="carniceria">Carnicerías</option>
+                                    <option value="verduleria">Verdulerías</option>
+                                    <option value="panaderia">Panaderías</option>
+                                    <option value="organicos">Venta de productos orgánicos</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="business-email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="business-email" required>
+                                <div class="invalid-feedback">
+                                    Por favor, introduce un correo electrónico válido.
+                                </div>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label for="business-password" class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="business-password" required>
+                                    <button class="btn toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <span class="strength-label">Fuerza de contraseña:</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <ul class="password-requirements">
+                                        <li id="business-length-check"><span class="check-icon">✓</span> Mínimo 8 caracteres</li>
+                                        <li id="business-uppercase-check"><span class="check-icon">✓</span> Al menos una mayúscula</li>
+                                        <li id="business-lowercase-check"><span class="check-icon">✓</span> Al menos una minúscula</li>
+                                        <li id="business-number-check"><span class="check-icon">✓</span> Al menos un número</li>
+                                        <li id="business-special-check"><span class="check-icon">✓</span> Al menos un carácter especial</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mb-3 password-field">
+                                <label for="business-confirm-password" class="form-label">Confirmar contraseña</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="business-confirm-password" required>
+                                    <button class="btn toggle-password" type="button">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Las contraseñas no coinciden.
+                                </div>
+                            </div>
+                            <button type="button" id="business-next-btn" class="btn btn-primary w-100">Siguiente</button>
+                        </form>
+                        
+                        <!-- Formulario de registro de negocio - Página 2 -->
+                        <form id="business-register-form-page2" style="display: none;">
+                            <h3>Registro de Negocio</h3>
+                            <div class="step-indicator">
+                                <span class="step completed">1</span>
+                                <span class="step-line completed"></span>
+                                <span class="step active">2</span>
+                            </div>
+                            
+                            <div id="physical-store-fields">
+                                <div class="mb-3">
+                                    <label for="business-country" class="form-label">País</label>
+                                    <input type="text" class="form-control" id="business-country">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="business-state" class="form-label">Estado</label>
+                                    <input type="text" class="form-control" id="business-state">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="business-city" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="business-city">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="business-postal-code" class="form-label">Código Postal</label>
+                                    <input type="text" class="form-control" id="business-postal-code">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="business-neighborhood" class="form-label">Colonia</label>
+                                    <input type="text" class="form-control" id="business-neighborhood">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="business-street" class="form-label">Calle</label>
+                                    <input type="text" class="form-control" id="business-street">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="business-terms" required>
+                                <label class="form-check-label" for="business-terms">Acepto los <a href="#">términos y condiciones</a></label>
+                            </div>
+                            
+                            <div class="buttons-container">
+                                <button type="button" id="business-back-btn" class="btn btn-secondary">Atrás</button>
+                                <button type="submit" class="btn btn-primary">Registrarse</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <!-- JavaScript personalizado -->
+    <script src="../js/login.js"></script>
+</body>
+</html>

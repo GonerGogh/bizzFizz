@@ -1,0 +1,463 @@
+/* Variables de colores */
+:root {
+    --primary-color: #8B386D;
+    --secondary-color: #111D3D;
+    --accent-color: #643262;
+    --light-color: #FFFFFF;
+    --dark-color: #212529;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --gray-color: #6c757d;
+    --light-gray: #e9ecef;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7ff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: all 0.6s ease;
+
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Contenedor principal */
+.login-container {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin: 0 auto;
+    transition: all 0.6s ease;
+}
+
+.login-container:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+/* Lado izquierdo */
+.left-side {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-side::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.left-side::after {
+    content: "";
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.brand-info {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.logo {
+    margin-bottom: 30px;
+}
+
+.logo img {
+    border-radius: 12px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.brand-info h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.brand-info p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* Lado derecho */
+.right-side {
+    background-color: white;
+    padding: 40px;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+}
+
+.form-container {
+    width: 100%;
+}
+
+/* Pestañas de navegación */
+.nav-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.tab-option {
+    padding: 12px 20px;
+    cursor: pointer;
+    position: relative;
+    font-weight: 500;
+    color: var(--gray-color);
+    transition: all 0.3s ease;
+}
+
+.tab-option:hover {
+    color: var(--primary-color);
+}
+
+.tab-option.active {
+    color: var(--primary-color);
+}
+
+.tab-option.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Selector de tipo de usuario */
+.user-type-selector {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.btn-group {
+    width: 100%;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.user-type-btn {
+    flex: 1;
+    padding: 12px 0;
+    background-color: var(--light-gray);
+    color: var(--gray-color);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.user-type-btn:hover {
+    background-color: #dee2e6;
+}
+
+.user-type-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Formularios */
+form {
+    transition: all 0.3s ease;
+}
+
+form h3 {
+    margin-bottom: 25px;
+    color: var(--dark-color);
+    font-weight: 600;
+    text-align: center;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    background-color: var(--light-color);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(139, 56, 109, 0.15);
+}
+
+.form-select {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--light-gray);
+    background-color: var(--light-color);
+    transition: all 0.3s ease;
+    height: auto;
+}
+
+.form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(139, 56, 109, 0.15);
+}
+
+/* Campo de contraseña */
+.password-field .input-group {
+    position: relative;
+}
+
+.toggle-password {
+    border: none;
+    background: transparent;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    z-index: 10;
+    padding: 0 15px;
+    color: var(--gray-color);
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+/* Requisitos de contraseña */
+.password-strength {
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+.strength-label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--gray-color);
+}
+
+.progress {
+    height: 6px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.progress-bar {
+    background-color: var(--danger-color);
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-requirements {
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.password-requirements li {
+    color: var(--gray-color);
+    display: flex;
+    align-items: center;
+}
+
+.check-icon {
+    margin-right: 5px;
+    color: var(--gray-color);
+    font-weight: bold;
+}
+
+.valid .check-icon {
+    color: var(--success-color);
+}
+
+/* Olvidaste contraseña */
+.forgot-password {
+    float: right;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 12px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--light-gray);
+    border-color: var(--light-gray);
+    color: var(--dark-color);
+    padding: 12px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #dee2e6;
+    border-color: #dee2e6;
+    transform: translateY(-2px);
+}
+
+/* Indicador de pasos */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--light-gray);
+    color: var(--gray-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    position: relative;
+}
+
+.step.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.step.completed {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.step-line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: var(--light-gray);
+    margin: 0 10px;
+}
+
+.step-line.completed {
+    background-color: var(--success-color);
+}
+
+/* Contenedor de botones */
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.buttons-container .btn {
+    flex: 1;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.active-form {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .login-container {
+        max-width: 900px;
+    }
+    
+    .left-side, .right-side {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .login-container {
+        max-width: 600px;
+    }
+    
+    .left-side {
+        display: none;
+    }
+    
+    .right-side {
+        min-height: auto;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    body {
+        padding: 10px;
+    }
+    
+    .right-side {
+        padding: 20px;
+    }
+    
+    .nav-tabs {
+        margin-bottom: 20px;
+    }
+    
+    .tab-option {
+        padding: 10px 15px;
+    }
+    
+    .password-requirements {
+        grid-template-columns: 1fr;
+    }
+}

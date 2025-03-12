@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Interfaz de Negocio - Gestión</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Estilos personalizados -->
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .navbar-brand {
+      font-weight: bold;
+    }
+    .nav-link {
+      font-size: 1.1rem;
+    }
+    .sidebar {
+      min-height: 100vh;
+      background: #343a40;
+    }
+    .sidebar .nav-link {
+      color: #fff;
+      padding: 10px 15px;
+    }
+    .sidebar .nav-link.active, .sidebar .nav-link:hover {
+      background: #495057;
+      color: #fff;
+    }
+    .content {
+      padding: 20px;
+    }
+    .card {
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .form-control {
+      border-radius: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">MiNegocio</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Perfil</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Cerrar sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar de navegación -->
+      <nav class="col-md-2 d-none d-md-block sidebar">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#dashboard" data-bs-toggle="tab">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#gestion-negocio" data-bs-toggle="tab">Gestión de Negocio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#publicaciones" data-bs-toggle="tab">Publicaciones</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#solicitudes" data-bs-toggle="tab">Solicitudes de Servicio</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Área de contenido principal -->
+      <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 content">
+        <div class="tab-content">
+          <!-- Dashboard -->
+          <div class="tab-pane fade show active" id="dashboard">
+            <h2 class="mt-4">Dashboard</h2>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Publicaciones Activas</h5>
+                    <p class="card-text display-4">10</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Solicitudes Recibidas</h5>
+                    <p class="card-text display-4">5</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Likes Totales</h5>
+                    <p class="card-text display-4">150</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gestión de Negocio -->
+          <div class="tab-pane fade" id="gestion-negocio">
+            <h2 class="mt-4">Gestión de Negocio</h2>
+            <!-- Formulario de Registro / Edición de Negocio -->
+            <div class="card">
+              <div class="card-header">Registro / Edición de Negocio</div>
+              <div class="card-body">
+                <form id="formNegocio">
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="nombreNegocio" class="form-label">Nombre del Negocio</label>
+                      <input type="text" class="form-control" id="nombreNegocio" placeholder="Ej. Tienda ABC" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="tipoNegocio" class="form-label">Tipo de Negocio</label>
+                      <select class="form-control" id="tipoNegocio" required>
+                        <option value="">Seleccione...</option>
+                        <option value="minorista">Venta minoritaria en línea</option>
+                        <option value="local">Tienda local</option>
+                        <option value="servicios">Empresa de servicios</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="pais" class="form-label">País o Región</label>
+                      <input type="text" class="form-control" id="pais" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="estado" class="form-label">Estado</label>
+                      <input type="text" class="form-control" id="estado" required>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="ciudad" class="form-label">Ciudad</label>
+                      <input type="text" class="form-control" id="ciudad" required>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="cp" class="form-label">Código Postal</label>
+                      <input type="text" class="form-control" id="cp" required>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="colonia" class="form-label">Colonia</label>
+                    <input type="text" class="form-control" id="colonia" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="calle" class="form-label">Calle</label>
+                    <input type="text" class="form-control" id="calle" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="webNegocio" class="form-label">Página Web</label>
+                    <input type="url" class="form-control" id="webNegocio">
+                  </div>
+                  <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría de Servicio</label>
+                    <input type="text" class="form-control" id="categoria" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Guardar Negocio</button>
+                  <button type="button" class="btn btn-danger" id="eliminarCuenta">Eliminar Cuenta</button>
+                </form>
+              </div>
+            </div>
+            <!-- Busqueda de Negocio -->
+            <div class="card mt-4">
+              <div class="card-header">Buscar Negocio</div>
+              <div class="card-body">
+                <form id="buscarNegocioForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <input type="text" class="form-control" id="buscarNombre" placeholder="Nombre del Negocio">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <select class="form-control" id="buscarTipo">
+                        <option value="">Tipo de Negocio</option>
+                        <option value="minorista">Venta minoritaria en línea</option>
+                        <option value="local">Tienda local</option>
+                        <option value="servicios">Empresa de servicios</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-secondary">Buscar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Publicaciones -->
+          <div class="tab-pane fade" id="publicaciones">
+            <h2 class="mt-4">Gestión de Publicaciones</h2>
+            <!-- Registro de Publicaciones -->
+            <div class="card">
+              <div class="card-header">Crear Publicación</div>
+              <div class="card-body">
+                <form id="formPublicacion">
+                  <div class="mb-3">
+                    <label for="tituloPublicacion" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="tituloPublicacion" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="descripcionPublicacion" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="descripcionPublicacion" rows="3" required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="precioPublicacion" class="form-label">Precio</label>
+                    <input type="number" class="form-control" id="precioPublicacion" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="imagenesPublicacion" class="form-label">Imágenes</label>
+                    <input type="file" class="form-control" id="imagenesPublicacion" accept="image/*" multiple>
+                  </div>
+                  <div class="mb-3">
+                    <label for="ubicacionPublicacion" class="form-label">Ubicación</label>
+                    <input type="text" class="form-control" id="ubicacionPublicacion" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Publicar</button>
+                </form>
+              </div>
+            </div>
+            <!-- Panel de Publicaciones -->
+            <div class="card mt-4">
+              <div class="card-header">Panel de Publicaciones</div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Título</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="listaPublicaciones">
+                    <!-- Las publicaciones se cargarán dinámicamente -->
+                    <tr>
+                      <td>Ejemplo de Publicación</td>
+                      <td>Activo</td>
+                      <td>
+                        <button class="btn btn-warning btn-sm editarPublicacion">Editar</button>
+                        <button class="btn btn-danger btn-sm eliminarPublicacion">Eliminar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Solicitudes de Servicio -->
+          <div class="tab-pane fade" id="solicitudes">
+            <h2 class="mt-4">Solicitudes de Servicio</h2>
+            <div class="card">
+              <div class="card-header">Listado de Solicitudes</div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Cliente</th>
+                      <th>Servicio Solicitado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="listaSolicitudes">
+                    <!-- Las solicitudes se cargarán dinámicamente -->
+                    <tr>
+                      <td>Cliente Ejemplo</td>
+                      <td>Servicio X</td>
+                      <td>
+                        <button class="btn btn-success btn-sm aceptarSolicitud">Aceptar</button>
+                        <button class="btn btn-danger btn-sm rechazarSolicitud">Rechazar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div><!-- Fin tab-content -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Librería SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Controlador de alertas (alertController.js) -->
+  <script src="alertController.js"></script>
+  <!-- Script personalizado para manejo de eventos -->
+  <script>
+    // Evento para eliminar cuenta
+    document.getElementById('eliminarCuenta').addEventListener('click', function() {
+      AlertController.showConfirmation("¿Estás seguro de eliminar tu cuenta de negocio?", "Confirmar eliminación", function() {
+        // Lógica para eliminar la cuenta (por ejemplo, llamada a API)
+        console.log("Cuenta eliminada.");
+      });
+    });
+
+    // Evento para guardar información del negocio
+    document.getElementById('formNegocio').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Lógica para guardar la información del negocio
+      AlertController.showSuccess("Información del negocio guardada correctamente.", "Éxito");
+    });
+
+    // Evento para crear publicación
+    document.getElementById('formPublicacion').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Validación y proceso de creación de la publicación
+      AlertController.showSuccess("Publicación creada exitosamente.", "Publicación Creada");
+    });
+  </script>
+</body>
+</html>

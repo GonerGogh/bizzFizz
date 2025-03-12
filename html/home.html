@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliente Home</title>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="left-nav">
+                <button id="menu-toggle" class="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-container">
+                    <input type="text" placeholder="Buscar servicios...">
+                    <button class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="right-nav">
+                <button class="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="profile-container">
+                    <img src="https://via.placeholder.com/40" alt="Perfil" class="profile-pic" id="profile-trigger">
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <div class="profile-header">
+                            <img src="https://via.placeholder.com/60" alt="Perfil" class="profile-pic-large">
+                            <div class="profile-info">
+                                <h3>Usuario Cliente</h3>
+                                <p>usuario@email.com</p>
+                            </div>
+                        </div>
+                        <div class="profile-menu">
+                            <a href="#"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
+                            <a href="#"><i class="fas fa-history"></i> Historial</a>
+                            <a href="#"><i class="fas fa-cog"></i> Configuración</a>
+                            <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">Logo</div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="active"><i class="fas fa-home"></i> Inicio</a>
+            <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
+            <a href="#"><i class="fas fa-history"></i> Historial</a>
+            <a href="#"><i class="fas fa-tag"></i> Promociones</a>
+            <a href="#"><i class="fas fa-map-marker-alt"></i> Cercanos</a>
+            <a href="#"><i class="fas fa-star"></i> Mejor Valorados</a>
+            <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+        </div>
+    </div>
+
+    <main class="content" id="main-content">
+        <section class="publications-container">
+            <h1>Publicaciones</h1>
+            
+            <div class="publications-grid">
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <h2 class="publication-title">Corte de Cabello Profesional</h2>
+                    </div>
+                    <div class="publication-content">
+                        <div class="publication-image">
+                            <img src="https://via.placeholder.com/300x200" alt="Imagen">
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-description">Servicio de corte de cabello con los mejores estilistas de la ciudad. Incluye lavado y peinado.</p>
+                            <div class="publication-footer">
+                                <div class="publication-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Centro, Ciudad</span>
+                                </div>
+                                <div class="publication-price">
+                                    <span>$25.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="publication-actions">
+                        <button class="action-button favorite"><i class="far fa-heart"></i></button>
+                        <button class="action-button contact"><i class="fas fa-phone"></i> Contactar</button>
+                    </div>
+                </div>
+
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <h2 class="publication-title">Masaje Relajante</h2>
+                    </div>
+                    <div class="publication-content">
+                        <div class="publication-image">
+                            <img src="https://via.placeholder.com/300x200" alt="Imagen">
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-description">Masaje relajante de 60 minutos con aceites esenciales y aromaterapia. Ideal para aliviar el estrés.</p>
+                            <div class="publication-footer">
+                                <div class="publication-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Norte, Ciudad</span>
+                                </div>
+                                <div class="publication-price">
+                                    <span>$45.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="publication-actions">
+                        <button class="action-button favorite"><i class="far fa-heart"></i></button>
+                        <button class="action-button contact"><i class="fas fa-phone"></i> Contactar</button>
+                    </div>
+                </div>
+
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <h2 class="publication-title">Manicura y Pedicura</h2>
+                    </div>
+                    <div class="publication-content">
+                        <div class="publication-image">
+                            <img src="https://via.placeholder.com/300x200" alt="Imagen">
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-description">Servicio completo de manicura y pedicura con esmaltado semipermanente y diseños a elección.</p>
+                            <div class="publication-footer">
+                                <div class="publication-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Sur, Ciudad</span>
+                                </div>
+                                <div class="publication-price">
+                                    <span>$35.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="publication-actions">
+                        <button class="action-button favorite"><i class="far fa-heart"></i></button>
+                        <button class="action-button contact"><i class="fas fa-phone"></i> Contactar</button>
+                    </div>
+                </div>
+
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <h2 class="publication-title">Limpieza Facial Profunda</h2>
+                    </div>
+                    <div class="publication-content">
+                        <div class="publication-image">
+                            <img src="https://via.placeholder.com/300x200" alt="Imagen">
+                        </div>
+                        <div class="publication-details">
+                            <p class="publication-description">Tratamiento facial completo con limpieza, exfoliación, extracción y mascarilla hidratante.</p>
+                            <div class="publication-footer">
+                                <div class="publication-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Este, Ciudad</span>
+                                </div>
+                                <div class="publication-price">
+                                    <span>$50.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="publication-actions">
+                        <button class="action-button favorite"><i class="far fa-heart"></i></button>
+                        <button class="action-button contact"><i class="fas fa-phone"></i> Contactar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/home.js"></script>
+</body>
+</html>
