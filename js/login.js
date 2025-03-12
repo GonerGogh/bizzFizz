@@ -335,13 +335,15 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         
         const name = document.getElementById('client-name').value;
+        const lastP = document.getElementById('client-lastP').value;
+        const lastM = document.getElementById('client-lastM').value;
         const email = document.getElementById('client-email').value;
         const password = document.getElementById('client-password').value;
         const confirmPassword = document.getElementById('client-confirm-password').value;
         const terms = document.getElementById('client-terms').checked;
         
         // Validaciones
-        if (!name || !email || !password || !confirmPassword) {
+        if (!name || !lastP ||!lastM || !email || !password || !confirmPassword) {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, completa todos los campos',
@@ -350,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             return;
         }
+
         
         if (!validateEmail(email)) {
             Swal.fire({
@@ -391,7 +394,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Aquí iría la lógica para registrar cliente con backend
+        // ####################################  REGISTRAR CLIENTE #########
+
+        // aqui ira la logica para registrar cliente con backend
         // Por ahora simulamos una respuesta exitosa
         Swal.fire({
             title: 'Registro Exitoso',
