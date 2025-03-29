@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
+    
+    
+    
     // Referencias a elementos del DOM
     const loginTab = document.getElementById('login-tab');
     const registerTab = document.getElementById('register-tab');
@@ -291,127 +295,64 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Manejar envío de formularios
+    // Función para manejar el inicio de sesión
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
-        
-        if (!email || !password) {
+
+        // Enviar datos al servidor
+        fetch('http://localhost:8080/BIZZFIZZ/api/usuario/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, password: password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw err;
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Mostrar alerta de bienvenida con el nombre del usuario
+            Swal.fire({
+                title: '¡Bienvenido ' + data.nombre + '!',
+                icon: 'success',
+                confirmButtonColor: '#4361ee'
+            }).then(() => {
+                // Redirigir según el tipo de usuario
+                if (data.tipo_usuario === 'cliente') {
+                    window.location.href = 'home_cliente.html'; // Redirige a la página del cliente
+                } else if (data.tipo_usuario === 'negocio') {
+                    window.location.href = 'home_negocio.html'; // Redirige a la página del negocio
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Tipo de usuario desconocido.',
+                        icon: 'error',
+                        confirmButtonColor: '#4361ee'
+                    });
+                }
+            });
+        })
+        .catch(error => {
             Swal.fire({
                 title: 'Error',
-                text: 'Por favor, completa todos los campos',
+                text: error.mensaje || 'Error al iniciar sesión. Verifica tus credenciales.',
                 icon: 'error',
                 confirmButtonColor: '#4361ee'
             });
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Por favor, introduce un correo electrónico válido',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-        
-        // Aquí iría la lógica para iniciar sesión con backend
-        // Por ahora simulamos una respuesta exitosa
-        Swal.fire({
-            title: 'Éxito',
-            text: 'Has iniciado sesión correctamente',
-            icon: 'success',
-            confirmButtonColor: '#4361ee'
-        }).then(() => {
-            // Redirigir o realizar acciones después del login
-            console.log('Usuario logueado:', email);
         });
     });
+        
+       
+
     
-    clientRegisterForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('client-name').value;
-        const lastP = document.getElementById('client-lastP').value;
-        const lastM = document.getElementById('client-lastM').value;
-        const email = document.getElementById('client-email').value;
-        const password = document.getElementById('client-password').value;
-        const confirmPassword = document.getElementById('client-confirm-password').value;
-        const terms = document.getElementById('client-terms').checked;
-        
-        // Validaciones
-        if (!name || !lastP ||!lastM || !email || !password || !confirmPassword) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Por favor, completa todos los campos',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-
-        
-        if (!validateEmail(email)) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Por favor, introduce un correo electrónico válido',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-        
-        if (!validatePassword(password)) {
-            Swal.fire({
-                title: 'Error',
-                text: 'La contraseña no cumple con los requisitos de seguridad',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-        
-        if (password !== confirmPassword) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Las contraseñas no coinciden',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-        
-        if (!terms) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Debes aceptar los términos y condiciones',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
-            return;
-        }
-        
-        // ####################################  REGISTRAR CLIENTE #########
-
-        // aqui ira la logica para registrar cliente con backend
-        // Por ahora simulamos una respuesta exitosa
-        Swal.fire({
-            title: 'Registro Exitoso',
-            text: '¡Tu cuenta ha sido creada correctamente!',
-            icon: 'success',
-            confirmButtonColor: '#4361ee'
-        }).then(() => {
-            // Redirigir o realizar acciones después del registro
-            console.log('Cliente registrado:', { name, email });
-            
-            // Limpiar formulario y volver a la pantalla de login
-            this.reset();
-            loginTab.click();
-        });
-    });
+    
     
     // Manejar envío formulario negocio final
     document.getElementById('business-register-form-page2').addEventListener('submit', function(e) {
@@ -535,3 +476,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicialización - Mostrar formulario de login por defecto
     loginTab.click();
 });
+
