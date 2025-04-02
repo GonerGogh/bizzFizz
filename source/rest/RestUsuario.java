@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package rest;
 
 import com.google.gson.Gson;
@@ -23,7 +19,7 @@ import org.json.JSONObject;
  */
 @Path("usuario")
 public class RestUsuario {
-    
+
     @GET
     @Path("getAllUsuario")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,8 +35,7 @@ public class RestUsuario {
             return Response.ok(json).build();
         }
     }
-    
-    
+
     @POST
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -56,11 +51,14 @@ public class RestUsuario {
 
             if (usuario == null) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(new JSONObject().put("mensaje", "Credenciales incorrectas.").toString()).build();
+            } else if (!usuario.isActivo()) {
+                return Response.status(Response.Status.FORBIDDEN).entity(new JSONObject().put("mensaje", "Cuenta inactiva. Contacte al administrador.").toString()).build();
             } else {
                 // Incluir el nombre del usuario en la respuesta
                 JSONObject responseJson = new JSONObject();
                 responseJson.put("tipo_usuario", usuario.getTipo_usuario());
-                responseJson.put("nombre", usuario.getNombre_usuario()); // Asegúrate de que Usuario tenga un método getNombre()
+                responseJson.put("nombre", usuario.getNombre_usuario());
+                responseJson.put("activo", usuario.isActivo()); //Include active state for debugging.
 
                 return Response.ok(responseJson.toString()).build();
             }
@@ -68,5 +66,4 @@ public class RestUsuario {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new JSONObject().put("mensaje", "Error interno del servidor.").toString()).build();
         }
     }
-    
 }
