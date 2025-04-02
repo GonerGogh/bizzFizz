@@ -295,61 +295,80 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Función para manejar el inicio de sesión
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
+    // ... (resto del código JavaScript)
 
-        // Enviar datos al servidor
-        fetch('http://localhost:8080/BIZZFIZZ/api/usuario/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: email, password: password })
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => {
-                    throw err;
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    fetch('http://localhost:8080/BIZZFIZZ/api/usuario/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email, password: password })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw err;
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Mostrar alerta de bienvenida con el nombre del usuario
+        Swal.fire({
+            title: '¡Bienvenido ' + data.nombre + '!',
+            icon: 'success',
+            confirmButtonColor: '#4361ee'
+        }).then(() => {
+            // Redirigir según el tipo de usuario
+            if (data.tipo_usuario === 'cliente') {
+                window.location.href = 'home_cliente.html'; // Redirige a la página del cliente
+            } else if (data.tipo_usuario === 'negocio') {
+                window.location.href = 'home_negocio.html'; // Redirige a la página del negocio
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Tipo de usuario desconocido.',
+                    icon: 'error',
+                    confirmButtonColor: '#4361ee'
                 });
             }
-            return response.json();
-        })
-        .then(data => {
-            // Mostrar alerta de bienvenida con el nombre del usuario
-            Swal.fire({
-                title: '¡Bienvenido ' + data.nombre + '!',
-                icon: 'success',
-                confirmButtonColor: '#4361ee'
-            }).then(() => {
-                // Redirigir según el tipo de usuario
-                if (data.tipo_usuario === 'cliente') {
-                    window.location.href = 'home_cliente.html'; // Redirige a la página del cliente
-                } else if (data.tipo_usuario === 'negocio') {
-                    window.location.href = 'home_negocio.html'; // Redirige a la página del negocio
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Tipo de usuario desconocido.',
-                        icon: 'error',
-                        confirmButtonColor: '#4361ee'
-                    });
-                }
-            });
-        })
-        .catch(error => {
-            Swal.fire({
-                title: 'Error',
-                text: error.mensaje || 'Error al iniciar sesión. Verifica tus credenciales.',
-                icon: 'error',
-                confirmButtonColor: '#4361ee'
-            });
+        });
+
+    })
+    .catch(error => {
+        let mensajeError = error.mensaje || 'Error al iniciar sesión. Verifica tus credenciales.';
+
+        if (error.mensaje === "Cuenta inactiva. Contacte al administrador."){
+            mensajeError = error.mensaje;
+        }
+
+        Swal.fire({
+            title: 'Error',
+            text: mensajeError,
+            icon: 'error',
+            confirmButtonColor: '#4361ee'
         });
     });
+});
         
        
+      function limpiar() {
+    // Limpiar los campos de texto
+    document.getElementById("client-name").value = "";
+    document.getElementById("client-lastP").value = "";
+    document.getElementById("client-lastM").value = "";
+    document.getElementById("client-email").value = "";
+    document.getElementById("client-password").value = "";
+
+    // Restablecer los campos de selección a la opción predeterminada
+    document.getElementById("client-confirm-password").value = ""; // "Selecciona un estado"
+    document.getElementById("client-terms").value = ""; // "Selecciona una ciudad"
+}
 
     
     

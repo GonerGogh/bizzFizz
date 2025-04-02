@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cliente Home</title>
-    <link rel="stylesheet" href="../css/home_cliente.css">
+    <link rel="stylesheet" href="css/home_cliente.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -37,10 +37,10 @@
                             </div>
                         </div>
                         <div class="profile-menu">
-                            <a href="#"><i class="fas fa-user"></i> Mi Perfil</a>
+                            <!--<a href="#"><i class="fas fa-user"></i> Mi Perfil</a>
                             <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
                             <a href="#"><i class="fas fa-history"></i> Historial</a>
-                            <a href="#"><i class="fas fa-cog"></i> Configuración</a>
+                            <a href="#"><i class="fas fa-cog"></i> Configuración</a>-->
                             <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
                         </div>
                     </div>
@@ -54,13 +54,30 @@
             <div class="logo">Logo</div>
         </div>
         <div class="sidebar-menu">
-            <a href="#" class="active"><i class="fas fa-home"></i> Inicio</a>
-            <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
+          <!--  <a href="#" class="active"><i class="fas fa-home"></i> Inicio</a>-->
+            
+    <!-- Campos de negocio -->
+    <div class="mb-2">
+      <label>Correo</label>
+      <input type="text" id="categoriaServicio" class="form-control">
+    </div>
+    <div class="mb-2">
+      <label>Contraseña</label>
+      <input type="text" id="calle" class="form-control">
+    </div>
+   
+    
+    <div class="d-grid gap-2 mt-3">
+      <button id="btn-editar" class="btn btn-success">Guardar cambios</button>
+      <button id="btn-eliminar" class="btn btn-danger">Eliminar cuenta</button>
+    </div>
+            
+           <!-- <a href="#"><i class="fas fa-heart"></i> Favoritos</a>
             <a href="#"><i class="fas fa-history"></i> Historial</a>
             <a href="#"><i class="fas fa-tag"></i> Promociones</a>
             <a href="#"><i class="fas fa-map-marker-alt"></i> Cercanos</a>
             <a href="#"><i class="fas fa-star"></i> Mejor Valorados</a>
-            <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>
+            <a href="#"><i class="fas fa-question-circle"></i> Ayuda</a>-->
         </div>
     </div>
 
@@ -180,6 +197,6 @@
         </section>
     </main>
 
-    <script src="../js/home_cliente.js"></script>
+    <script src="js/home_cliente.js"></script>
 </body>
 </html>

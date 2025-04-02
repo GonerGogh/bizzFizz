@@ -10,11 +10,10 @@ import model.Usuario;
 import org.bson.conversions.Bson;
 
 /**
- *
  * @author flore
  */
 public class ControllerUsuario {
-    
+
     public List<Usuario> obtenerUsuario() {
         ConexionMongoDB conexion = new ConexionMongoDB();
         MongoDatabase database = conexion.open();
@@ -26,8 +25,7 @@ public class ControllerUsuario {
         conexion.close();
         return listaUsuarios;
     }
-    
-    
+
     public Usuario login(String email, String password) {
         ConexionMongoDB conexion = new ConexionMongoDB();
         MongoDatabase database = conexion.open();
@@ -43,5 +41,4 @@ public class ControllerUsuario {
         conexion.close();
         return usuario;
     }
-    
 }
