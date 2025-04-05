@@ -13,6 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
         mainContent.classList.toggle('shifted');
     });
 
+
+     const logoutButton = document.querySelector('.logout');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevenir el comportamiento predeterminado del enlace
+            // Redirigir al usuario a la página de inicio de sesión
+            window.location.href = 'index.html';
+        });
+    }
+     
     // Cerrar la barra lateral al hacer clic fuera de ella
     document.addEventListener('click', function(event) {
         const isClickInside = sidebar.contains(event.target) || menuToggle.contains(event.target);

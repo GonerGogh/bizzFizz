@@ -295,66 +295,71 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // ... (resto del código JavaScript)
+    
 
 loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
-    fetch('http://localhost:8080/BIZZFIZZ/api/usuario/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email, password: password })
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => {
-                throw err;
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Mostrar alerta de bienvenida con el nombre del usuario
-        Swal.fire({
-            title: '¡Bienvenido ' + data.nombre + '!',
-            icon: 'success',
-            confirmButtonColor: '#4361ee'
-        }).then(() => {
-            // Redirigir según el tipo de usuario
-            if (data.tipo_usuario === 'cliente') {
-                window.location.href = 'home_cliente.html'; // Redirige a la página del cliente
-            } else if (data.tipo_usuario === 'negocio') {
-                window.location.href = 'home_negocio.html'; // Redirige a la página del negocio
-            } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Tipo de usuario desconocido.',
-                    icon: 'error',
-                    confirmButtonColor: '#4361ee'
+        fetch('http://localhost:8080/BIZZFIZZ/api/usuario/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email, password: password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw err;
                 });
             }
-        });
+            return response.json();
+        })
+        .then(data => {
+            // Guardar el correo y el nombre del usuario en localStorage
+            localStorage.setItem('userEmail', data.email);
+            localStorage.setItem('userName', data.nombre);
+            localStorage.setItem('userType', data.tipo_usuario);
 
-    })
-    .catch(error => {
-        let mensajeError = error.mensaje || 'Error al iniciar sesión. Verifica tus credenciales.';
+            // Mostrar alerta de bienvenida con el nombre del usuario
+            Swal.fire({
+                title: '¡Bienvenido ' + data.nombre + '!',
+                icon: 'success',
+                confirmButtonColor: '#4361ee'
+            }).then(() => {
+                // Redirigir según el tipo de usuario
+                if (data.tipo_usuario === 'cliente') {
+                    window.location.href = 'home_cliente.html'; // Redirige a la página del cliente
+                } else if (data.tipo_usuario === 'negocio') {
+                    window.location.href = 'home_negocio.html'; // Redirige a la página del negocio
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Tipo de usuario desconocido.',
+                        icon: 'error',
+                        confirmButtonColor: '#4361ee'
+                    });
+                }
+            });
 
-        if (error.mensaje === "Cuenta inactiva. Contacte al administrador."){
-            mensajeError = error.mensaje;
-        }
+        })
+        .catch(error => {
+            let mensajeError = error.mensaje || 'Error al iniciar sesión. Verifica tus credenciales.';
 
-        Swal.fire({
-            title: 'Error',
-            text: mensajeError,
-            icon: 'error',
-            confirmButtonColor: '#4361ee'
+            if (error.mensaje === "Cuenta inactiva. Contacte al administrador."){
+                mensajeError = error.mensaje;
+            }
+
+            Swal.fire({
+                title: 'Error',
+                text: mensajeError,
+                icon: 'error',
+                confirmButtonColor: '#4361ee'
+            });
         });
     });
-});
         
        
       function limpiar() {

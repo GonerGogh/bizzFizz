@@ -1,115 +1,222 @@
 /* Fondo degradado */
 body {
-    background: linear-gradient(160deg, #b89bcf 0%, #f3e0ff 100%);
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* Sidebar de perfil */
-  .sidebar-perfil {
-    position: fixed;
-    top: 0;
-    right: -350px; /* Oculto por defecto */
-    width: 350px;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.3);
-    padding: 20px;
-    transition: right 0.3s;
-    overflow-y: auto;
-    z-index: 9999;
-  }
-  
-  .sidebar-perfil.active {
-    right: 0; /* Mostrar sidebar */
-  }
-  
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 9998;
-    display: none;
-  }
-  
-  .sidebar-overlay.active {
-    display: block;
-  }
-  
-  .btn-cerrar {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    float: right;
-    margin-top: -10px;
-  }
-  
-  /* Tarjetas de publicaciones */
-  .tarjeta-publicacion {
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-  
-  .encabezado-publicacion {
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  
-  .titulo-publicacion {
-    margin: 0;
-  }
-  
-  .cuerpo-publicacion {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .contenedor-imagen {
-    width: 120px;
-    height: 120px;
-    background: #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .placeholder-imagen {
-    text-align: center;
-    color: #666;
-  }
-  
-  .contenedor-detalles {
-    flex: 1;
-  }
-  
-  .footer-publicacion {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .acciones-publicacion {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  
-  .btn-editar, .btn-eliminar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: 5px;
-    font-size: 1.2rem;
-    color: #6b5b95;
-  }
-  
+  background: linear-gradient(160deg, #b89bcf 0%, #f3e0ff 100%);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Sidebar de perfil */
+.sidebar-perfil {
+  position: fixed;
+  top: 0;
+  right: -350px; /* Oculto por defecto */
+  width: 350px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  padding: 20px;
+  transition: right 0.3s;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.sidebar-perfil.active {
+  right: 0; /* Mostrar sidebar */
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 9998;
+  display: none;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  float: right;
+  margin-top: -10px;
+}
+
+/* Tarjetas de publicaciones */
+.tarjeta-publicacion {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.encabezado-publicacion {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.titulo-publicacion {
+  margin: 0;
+}
+
+.cuerpo-publicacion {
+  display: flex;
+  gap: 15px;
+}
+
+.contenedor-imagen {
+  width: 120px;
+  height: 120px;
+  background: #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-imagen {
+  text-align: center;
+  color: #666;
+}
+
+.contenedor-detalles {
+  flex: 1;
+}
+
+.footer-publicacion {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.acciones-publicacion {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.btn-editar, .btn-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 1.2rem;
+  color: #6b5b95;
+}
+
+
+
+
+
+
+
+
+
+/* ... (tus estilos existentes) ... */
+
+/* Estilos para el sidebar de perfil */
+.sidebar-perfil {
+  position: fixed;
+  top: 0;
+  right: -320px; /* Ajusta el ancho si es necesario */
+  width: 320px;
+  height: 100%;
+  background-color: #f9f9f9; /* Un gris claro de fondo */
+  box-shadow: -3px 0 10px rgba(0, 0, 0, 0.15); /* Sombra sutil */
+  padding: 30px; /* Aumenta el padding interior */
+  transition: right 0.3s ease-in-out; /* Transición más suave */
+  overflow-y: auto;
+  z-index: 9999;
+  border-left: 1px solid #eee; /* Borde sutil izquierdo */
+}
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  float: right;
+  margin-top: -15px;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.btn-cerrar:hover {
+  color: #333;
+}
+
+.profile-actions .profile-image-container {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave en la imagen */
+}
+
+.profile-actions .btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.profile-actions .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.sidebar-perfil h5 {
+  color: #999;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-perfil .form-label {
+  margin-bottom: 0.2rem;
+}
+
+.sidebar-perfil .form-control,
+.sidebar-perfil .form-select {
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.sidebar-perfil .btn-primary {
+  background-color: #8c6bbf;
+  border-color: #8c6bbf;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.sidebar-perfil .btn-primary:hover {
+  background-color: #6d4a9e;
+  border-color: #6d4a9e;
+}
+
+.sidebar-perfil .btn-outline-danger {
+  /* Los estilos hover ya están definidos arriba */
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Ligeramente más transparente */
+  z-index: 9998;
+  display: none;
+  transition: background 0.2s ease-in-out;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}

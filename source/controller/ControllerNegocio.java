@@ -1,13 +1,17 @@
 
 package controller;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import db.ConexionMongoDB;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import model.Categoria;
 import model.Negocio;
@@ -19,6 +23,7 @@ import org.bson.conversions.Bson;
  * @author flore
  */
 public class ControllerNegocio {
+    
     
     public boolean agregarNegocio(Negocio negocio) {
 
@@ -130,6 +135,85 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
 }
     
     
+
+public boolean actualizarNegocioPorNombre(Negocio negocio) {
+    ConexionMongoDB conexion = new ConexionMongoDB();
+    MongoDatabase database = conexion.open();
+    MongoCollection<Document> collectionNegocio = database.getCollection("negocio");
+
+    Bson filtro = Filters.eq("nombre_negocio", negocio.getNombre_negocio());
+    List<Bson> updatesList = new ArrayList<>();
+
+    if (negocio.getCategoria() != null) {
+        if (negocio.getCategoria().getId_categoria() > 0) {
+            updatesList.add(Updates.set("categoria.id_categoria", negocio.getCategoria().getId_categoria()));
+        }
+        if (negocio.getCategoria().getNombre_categoria() != null) {
+            updatesList.add(Updates.set("categoria.nombre_categoria", negocio.getCategoria().getNombre_categoria()));
+        }
+    }
+    if (negocio.getPais() != null) {
+        updatesList.add(Updates.set("pais", negocio.getPais()));
+    }
+    if (negocio.getEstado() != null) {
+        updatesList.add(Updates.set("estado", negocio.getEstado()));
+    }
+    if (negocio.getCiudad() != null) {
+        updatesList.add(Updates.set("ciudad", negocio.getCiudad()));
+    }
+    if (negocio.getCodigo_postal() != null) {
+        updatesList.add(Updates.set("codigo_postal", negocio.getCodigo_postal()));
+    }
+    if (negocio.getCalle() != null) {
+        updatesList.add(Updates.set("calle", negocio.getCalle()));
+    }
+    if (negocio.getColonia() != null) {
+        updatesList.add(Updates.set("colonia", negocio.getColonia()));
+    }
+    if (negocio.getTelefono_contacto() != null) {
+        updatesList.add(Updates.set("telefono_contacto", negocio.getTelefono_contacto()));
+    }
+    if (negocio.getWhatsapp() != null) {
+        updatesList.add(Updates.set("whatsapp", negocio.getWhatsapp()));
+    }
+    if (negocio.getFoto_perfil() != null) {
+        updatesList.add(Updates.set("foto_perfil", negocio.getFoto_perfil()));
+    }
+
+    Bson actualizaciones = Updates.combine(updatesList);
+
+    UpdateResult resultado = collectionNegocio.updateOne(filtro, actualizaciones);
+
+    conexion.close();
+    return resultado.getModifiedCount() > 0;
+}
+
+
+public boolean eliminarNegocio(String nombreNegocio) {
+        ConexionMongoDB conexion = new ConexionMongoDB();
+        MongoDatabase database = conexion.open();
+        MongoCollection<Document> collectionUsuario = database.getCollection("usuario");
+        MongoCollection<Document> collectionNegocio = database.getCollection("negocio");
+
+        try {
+            // 1. Actualizar el 'activo' del usuario asociado en la colección 'usuario'
+            Bson filtroUsuario = Filters.eq("nombre_usuario", nombreNegocio);
+            Bson actualizacionUsuario = Updates.set("activo", false);
+            UpdateResult resultadoUsuario = collectionUsuario.updateOne(filtroUsuario, actualizacionUsuario);
+
+            // 2. Actualizar el 'activo' del negocio en la colección 'negocio'
+            Bson filtroNegocio = Filters.eq("nombre_negocio", nombreNegocio);
+            Bson actualizacionNegocio = Updates.set("usuario.activo", false); // Actualiza el 'activo' dentro del subdocumento 'usuario'
+            UpdateResult resultadoNegocio = collectionNegocio.updateOne(filtroNegocio, actualizacionNegocio);
+
+            // Consideramos exitoso si al menos un documento fue modificado en ambas colecciones
+            return resultadoUsuario.getModifiedCount() > 0 && resultadoNegocio.getModifiedCount() > 0;
+
+        } finally {
+            conexion.close();
+        }
+    }
+
     
     // Método para obtener todos los productos de maquillaje
     public List<Negocio> obtenerNegocio() {
@@ -143,5 +227,18 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
         conexion.close();
         return listaNegocios;
     }
+    
+    
+    public Negocio obtenerNegocioPorNombreUsuario(String nombreUsuario) {
+    ConexionMongoDB conexion = new ConexionMongoDB();
+    MongoDatabase database = conexion.open();
+    MongoCollection<Negocio> collectionNegocio = database.getCollection("negocio", Negocio.class); // Usa Negocio.class
+
+    Bson filtro = Filters.eq("nombre_negocio", nombreUsuario);
+    Negocio negocio = collectionNegocio.find(filtro).first(); // Obtiene el primer documento como Negocio
+
+    conexion.close();
+    return negocio;
+}
     
 }
