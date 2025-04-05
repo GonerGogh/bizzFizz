@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -10,24 +11,28 @@ public class Publicacion {
 
     int id_publicacion;
     Negocio negocio;
-    String titulo, descrpcion, ubicacion;
+    String titulo, descripcion;
     double precio;
+    private List<String> imagen_publicacion;
+    int reaccion;
+    String ubicacion;
     Date  fecha_publicacion;
-    boolean estatus, destacada;
-    ImagenPublicacion imagen_publicacion;
+    boolean activo, destacada;
 
-    public Publicacion(int id_publicacion, Negocio negocio, String titulo, String descrpcion, String ubicacion, double precio, Date fecha_publicacion, boolean estatus, boolean destacada, ImagenPublicacion imagen_publicacion) {
+    public Publicacion(int id_publicacion, Negocio negocio, String titulo, String descripcion, double precio, List<String> imagen_publicacion, int reaccion, String ubicacion, Date fecha_publicacion, boolean activo, boolean destacada) {
         this.id_publicacion = id_publicacion;
         this.negocio = negocio;
         this.titulo = titulo;
-        this.descrpcion = descrpcion;
-        this.ubicacion = ubicacion;
+        this.descripcion = descripcion;
         this.precio = precio;
-        this.fecha_publicacion = fecha_publicacion;
-        this.estatus = estatus;
-        this.destacada = destacada;
         this.imagen_publicacion = imagen_publicacion;
+        this.reaccion = reaccion;
+        this.ubicacion = ubicacion;
+        this.fecha_publicacion = fecha_publicacion;
+        this.activo = activo;
+        this.destacada = destacada;
     }
+
     
     public Publicacion(){
         
@@ -57,20 +62,12 @@ public class Publicacion {
         this.titulo = titulo;
     }
 
-    public String getDescrpcion() {
-        return descrpcion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescrpcion(String descrpcion) {
-        this.descrpcion = descrpcion;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public double getPrecio() {
@@ -81,6 +78,30 @@ public class Publicacion {
         this.precio = precio;
     }
 
+    public List<String> getImagen_publicacion() {
+        return imagen_publicacion;
+    }
+
+    public void setImagen_publicacion(List<String> imagen_publicacion) {
+        this.imagen_publicacion = imagen_publicacion;
+    }
+
+    public int getReaccion() {
+        return reaccion;
+    }
+
+    public void setReaccion(int reaccion) {
+        this.reaccion = reaccion;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public Date getFecha_publicacion() {
         return fecha_publicacion;
     }
@@ -89,12 +110,12 @@ public class Publicacion {
         this.fecha_publicacion = fecha_publicacion;
     }
 
-    public boolean isEstatus() {
-        return estatus;
+    public boolean isActivo() {
+        return activo;
     }
 
-    public void setEstatus(boolean estatus) {
-        this.estatus = estatus;
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     public boolean isDestacada() {
@@ -105,14 +126,6 @@ public class Publicacion {
         this.destacada = destacada;
     }
 
-    public ImagenPublicacion getImagen_publicacion() {
-        return imagen_publicacion;
-    }
-
-    public void setImagen_publicacion(ImagenPublicacion imagen_publicacion) {
-        this.imagen_publicacion = imagen_publicacion;
-    }
-    
     
     
     

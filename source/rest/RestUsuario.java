@@ -58,6 +58,7 @@ public class RestUsuario {
                 JSONObject responseJson = new JSONObject();
                 responseJson.put("tipo_usuario", usuario.getTipo_usuario());
                 responseJson.put("nombre", usuario.getNombre_usuario());
+                responseJson.put("email", usuario.getCorreo_electronico());
                 responseJson.put("activo", usuario.isActivo()); //Include active state for debugging.
 
                 return Response.ok(responseJson.toString()).build();

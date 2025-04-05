@@ -80,10 +80,21 @@ async function registrarCliente(event) {
 
         alert("Cliente registrado correctamente.");
         cargarClientes(); // Recargar la lista de clientes
-        
+        limpiar(); // Limpiar los campos del formulario después del registro exitoso
 
     } catch (error) {
         console.error("Error al registrar cliente:", error);
         alert("Error al registrar cliente. Por favor, inténtalo de nuevo.");
     }
+}
+
+function limpiar() {
+    // Limpiar los campos de texto
+    document.getElementById("client-name").value = "";
+    document.getElementById("client-lastP").value = "";
+    document.getElementById("client-lastM").value = "";
+    document.getElementById("client-email").value = "";
+    document.getElementById("client-password").value = "";
+    document.getElementById("client-confirm-password").value = "";
+    document.getElementById("client-terms").checked = false; // Desmarcar el checkbox de términos
 }

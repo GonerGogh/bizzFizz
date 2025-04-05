@@ -57,6 +57,8 @@ async function registrarNegocio(event) {
     const nombre_negocio = document.getElementById("business-name").value;
     const tipo_negocio = document.getElementById("business-type").value;
     const sitio_web = document.getElementById("business-website").value;
+    const telefono_contacto = document.getElementById("business-phone").value;
+    const whatsapp = document.getElementById("business-whatsapp").value;
     const nombre_categoria = document.getElementById("business-category").value;
     const correo_electronico = document.getElementById("business-email").value;
     const contrasenia = document.getElementById("business-password").value;
@@ -86,6 +88,8 @@ async function registrarNegocio(event) {
                 correo_electronico: correo_electronico,
                 contrasenia: contrasenia
             },
+            telefono_contacto : telefono_contacto,
+            whatsapp : whatsapp,
             pais: pais,
             estado: estado,
             ciudad: ciudad,
@@ -93,6 +97,9 @@ async function registrarNegocio(event) {
             colonia: colonia,
             calle: calle
         };
+        
+        console.log("Telefono de contacto:", telefono_contacto);
+        console.log("WhatsApp:", whatsapp);
 
         let URL = "http://localhost:8080/BIZZFIZZ/api/negocio/agregarNegocio";
         let response = await fetch(URL, {
