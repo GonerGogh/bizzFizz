@@ -61,6 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnBuscar = document.getElementById('btnBuscarImagen'); // Obtener el nuevo botón
     const btnLimpiarBusqueda = document.getElementById('btnLimpiarBusqueda'); // Obtener el nuevo botón
     let todasLasPublicacionesDelNegocio = []; // Variable para almacenar todas las publicaciones del negocio
+    
+        // Elementos del DOM relacionados con los números de contacto en el sidebar
+    const numeroContactoInput = document.getElementById('numeroContacto');
+    const numeroWhatsAppInput = document.getElementById('numeroWhatsApp');
 
 
     function actualizarBotonLimpiar() {
@@ -79,6 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
         cargarDatosNegocio();
         configurarEventListeners();
         actualizarBotonLimpiar(); // Asegurar el estado inicial del botón al cargar la página
+        
+        // Aplicar formato a los campos de número de contacto al cargar la página
+        setupPhoneFormatSidebar('numeroContacto');
+        setupPhoneFormatSidebar('numeroWhatsApp');
 
     }
 
@@ -180,7 +188,54 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000); // 5000 milisegundos = 5 segundos
     }
 
-    // Cargar datos del negocio en el sidebar
+
+    // Función para aplicar el formato de número en el sidebar
+    function setupPhoneFormatSidebar(inputId) {
+        const input = document.getElementById(inputId);
+        const placeholderText = "Escribe tu número con lada (+xx xxx-xxx-xxxx)";
+        input.placeholder = placeholderText;
+
+        input.addEventListener("input", function() {
+            let value = this.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+            let formattedValue = '';
+            let rawNumber = '';
+
+            if (value.startsWith('+')) {
+                value = value.substring(1); // Eliminar el signo '+' temporalmente para el formato
+            }
+
+            if (value.length > 0) {
+                formattedValue += '+';
+                rawNumber += value.substring(0, 2);
+                formattedValue += value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                formattedValue += ' ';
+                rawNumber += value.substring(2, 5);
+                formattedValue += value.substring(2, 5);
+            }
+            if (value.length > 5) {
+                formattedValue += '-';
+                rawNumber += value.substring(5, 8);
+                formattedValue += value.substring(5, 8);
+            }
+            if (value.length > 8) {
+                formattedValue += '-';
+                rawNumber += value.substring(8, 12);
+                formattedValue += value.substring(8, 12);
+            }
+
+            this.value = formattedValue.substring(0, 18); // Limitar la longitud del input con formato
+            this.dataset.rawNumber = rawNumber.substring(0, 12); // Guardar solo los 12 números
+        });
+
+        input.addEventListener("blur", function() {
+            if (this.value === '+') {
+                this.value = ''; // Limpiar si solo se escribió el '+'
+            }
+        });
+    }
+    
     // Cargar datos del negocio en el sidebar
 function cargarDatosNegocio() {
     const nombreNegocio = localStorage.getItem('userName');
@@ -207,8 +262,13 @@ function cargarDatosNegocio() {
             document.getElementById('codigoPostal').value = negocio.codigo_postal || '';
             document.getElementById('calle').value = negocio.calle || '';
             document.getElementById('colonia').value = negocio.colonia || '';
-            document.getElementById('numeroContacto').value = negocio.telefono_contacto || '';
-            document.getElementById('numeroWhatsApp').value = negocio.whatsapp || '';
+            
+            // Establecer el valor formateado y el rawNumber en los inputs
+                document.getElementById('numeroContacto').value = formatPhoneNumber(negocio.telefono_contacto);
+                document.getElementById('numeroContacto').dataset.rawNumber = negocio.telefono_contacto || '';
+
+                document.getElementById('numeroWhatsApp').value = formatPhoneNumber(negocio.whatsapp);
+                document.getElementById('numeroWhatsApp').dataset.rawNumber = negocio.whatsapp || '';
             
             profileImageDisplay.src = negocio.foto_perfil || 'imagenes/subir_perfil.png';
             logoUsuarioImagen.src = negocio.foto_perfil || 'imagenes/icono_perfil.png'; // Cargar la imagen en el botón del menú
@@ -404,81 +464,105 @@ function cargarDatosNegocio() {
     return divPublicacion;
 }
 
-    // Guardar cambios del perfil
-    function guardarCambiosNegocio() {
-    const nombreNegocio = localStorage.getItem('userName');
-    if (!nombreNegocio) {
-        AlertController.showError("No se encontró el nombre del negocio en el almacenamiento local.");
-        return;
+
+    // Función para formatear un número (si ya viene sin formato de la API)
+    function formatPhoneNumber(number) {
+        if (!number || number.length !== 12 || !/^\d{2}\d{10}$/.test(number)) {
+            return number || ''; // Devolver sin cambios si no tiene el formato esperado
+        }
+        return `+${number.substring(0, 2)} ${number.substring(2, 5)}-${number.substring(5, 8)}-${number.substring(8, 12)}`;
     }
 
-    const categoriaNombre = document.getElementById('business-category').value;
-    // Buscar el ID de la categoría basado en el nombre
-    fetch('/BIZZFIZZ/api/categoria/getAllCategoria')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener las categorías');
-            }
-            return response.json();
-        })
-        .then(categorias => {
-            const categoriaSeleccionada = categorias.find(cat => cat.nombre_categoria === categoriaNombre);
-            const categoriaId = categoriaSeleccionada ? categoriaSeleccionada.id_categoria : null;
+    // Guardar cambios del perfil (modificado para usar el rawNumber)
+    function guardarCambiosNegocio() {
+        const nombreNegocio = localStorage.getItem('userName');
+        if (!nombreNegocio) {
+            AlertController.showError("No se encontró el nombre del negocio en el almacenamiento local.");
+            return;
+        }
 
-            if (!categoriaId && categoriaNombre) {
-                AlertController.showError("La categoría seleccionada no es válida.");
-                return;
-            }
-
-            const datosActualizados = {
-                nombre_negocio: nombreNegocio, // Necesario para identificar el negocio a actualizar
-                categoria: {
-                    id_categoria: categoriaId,
-                    nombre_categoria: categoriaNombre
-                },
-                pais: document.getElementById('pais').value,
-                estado: document.getElementById('estado').value,
-                ciudad: document.getElementById('ciudad').value,
-                codigo_postal: document.getElementById('codigoPostal').value,
-                calle: document.getElementById('calle').value,
-                colonia: document.getElementById('colonia').value,
-                telefono_contacto: document.getElementById('numeroContacto').value,
-                whatsapp: document.getElementById('numeroWhatsApp').value,
-            };
-
-            // Solo añadir la foto de perfil si se ha seleccionado una nueva
-            if (nuevaFotoPerfil) {
-                datosActualizados.foto_perfil = nuevaFotoPerfil;
-            }
-
-            fetch('/BIZZFIZZ/api/negocio/actualizarNegocioPorNombre', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datosActualizados)
-            })
+        const categoriaNombre = document.getElementById('business-category').value;
+        // Buscar el ID de la categoría basado en el nombre
+        fetch('/BIZZFIZZ/api/categoria/getAllCategoria')
             .then(response => {
                 if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.mensaje || 'Error al actualizar el negocio'); });
+                    throw new Error('Error al obtener las categorías');
                 }
                 return response.json();
             })
-            .then(data => {
-                AlertController.showSuccess('Los datos de tu negocio han sido actualizados correctamente.', 'Cambios guardados');
-                cargarDatosNegocio(); // Recargar los datos para mostrar la nueva foto (si se actualizó)
-                ocultarSidebarPerfil();
+            .then(categorias => {
+                const categoriaSeleccionada = categorias.find(cat => cat.nombre_categoria === categoriaNombre);
+                const categoriaId = categoriaSeleccionada ? categoriaSeleccionada.id_categoria : null;
+
+                if (!categoriaId && categoriaNombre) {
+                    AlertController.showError("La categoría seleccionada no es válida.");
+                    return;
+                }
+
+                const telefono_contacto = document.getElementById('numeroContacto').dataset.rawNumber || '';
+                const whatsapp = document.getElementById('numeroWhatsApp').dataset.rawNumber || '';
+
+                // Validación de número de teléfono al guardar
+                if (telefono_contacto.length !== 12 || !/^\d{2}\d{10}$/.test(telefono_contacto)) {
+                    AlertController.showError("El número de contacto debe tener 12 dígitos (lada + 10 dígitos).");
+                    return;
+                }
+
+                // Validación de WhatsApp al guardar
+                if (whatsapp.length !== 12 || !/^\d{2}\d{10}$/.test(whatsapp)) {
+                    AlertController.showError("El número de WhatsApp debe tener 12 dígitos (lada + 10 dígitos).");
+                    return;
+                }
+
+                const datosActualizados = {
+                    nombre_negocio: nombreNegocio,
+                    categoria: {
+                        id_categoria: categoriaId,
+                        nombre_categoria: categoriaNombre
+                    },
+                    pais: document.getElementById('pais').value,
+                    estado: document.getElementById('estado').value,
+                    ciudad: document.getElementById('ciudad').value,
+                    codigo_postal: document.getElementById('codigoPostal').value,
+                    calle: document.getElementById('calle').value,
+                    colonia: document.getElementById('colonia').value,
+                    telefono_contacto: telefono_contacto, // Usar el rawNumber para guardar
+                    whatsapp: whatsapp, // Usar el rawNumber para guardar
+                };
+
+                // Solo añadir la foto de perfil si se ha seleccionado una nueva
+                if (nuevaFotoPerfil) {
+                    datosActualizados.foto_perfil = nuevaFotoPerfil;
+                }
+
+                fetch('/BIZZFIZZ/api/negocio/actualizarNegocioPorNombre', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosActualizados)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.mensaje || 'Error al actualizar el negocio'); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    AlertController.showSuccess('Los datos de tu negocio han sido actualizados correctamente.', 'Cambios guardados');
+                    cargarDatosNegocio(); // Recargar los datos para mostrar la nueva foto y números formateados
+                    ocultarSidebarPerfil();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    AlertController.showError("Error al actualizar los datos del negocio: " + error.message);
+                });
             })
             .catch(error => {
                 console.error('Error:', error);
-                AlertController.showError("Error al actualizar los datos del negocio: " + error.message);
+                AlertController.showError("Error al obtener las categorías para guardar.");
             });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            AlertController.showError("Error al obtener las categorías para guardar.");
-        });
-}
+    }
 
     
     // Confirmación y eliminación de cuenta (MODIFICADO)

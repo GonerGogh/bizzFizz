@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
     cargarCategorias();
     setupFormularios();
     cargarNegocios();
+    setupPhoneFormat("business-phone");
+    setupPhoneFormat("business-whatsapp");
 });
 
 async function cargarCategorias() {
@@ -51,14 +53,62 @@ function setupFormularios() {
     formPage2.addEventListener("submit", registrarNegocio);
 }
 
+function setupPhoneFormat(inputId) {
+    const input = document.getElementById(inputId);
+    const placeholderText = "Escribe tu número con lada (+xx xxx-xxx-xxxx)";
+    input.placeholder = placeholderText;
+
+    input.addEventListener("input", function() {
+        let value = this.value.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        let formattedValue = '';
+        let rawNumber = '';
+
+        if (value.startsWith('+')) {
+            value = value.substring(1); // Eliminar el signo '+' temporalmente para el formato
+        }
+
+        if (value.length > 0) {
+            formattedValue += '+';
+            rawNumber += value.substring(0, 2);
+            formattedValue += value.substring(0, 2);
+        }
+        if (value.length > 2) {
+            formattedValue += ' ';
+            rawNumber += value.substring(2, 5);
+            formattedValue += value.substring(2, 5);
+        }
+        if (value.length > 5) {
+            formattedValue += '-';
+            rawNumber += value.substring(5, 8);
+            formattedValue += value.substring(5, 8);
+        }
+        if (value.length > 8) {
+            formattedValue += '-';
+            rawNumber += value.substring(8, 12);
+            formattedValue += value.substring(8, 12);
+        }
+
+        this.value = formattedValue.substring(0, 18); // Limitar la longitud del input con formato
+        this.dataset.rawNumber = rawNumber.substring(0, 12); // Guardar solo los 12 números
+    });
+
+    input.addEventListener("blur", function() {
+        if (this.value === '+') {
+            this.value = ''; // Limpiar si solo se escribió el '+'
+        }
+    });
+}
+
 async function registrarNegocio(event) {
     event.preventDefault();
 
     const nombre_negocio = document.getElementById("business-name").value;
     const tipo_negocio = document.getElementById("business-type").value;
     const sitio_web = document.getElementById("business-website").value;
-    const telefono_contacto = document.getElementById("business-phone").value;
-    const whatsapp = document.getElementById("business-whatsapp").value;
+    const telefono_contacto_formatted = document.getElementById("business-phone").value;
+    const whatsapp_formatted = document.getElementById("business-whatsapp").value;
+    const telefono_contacto = document.getElementById("business-phone").dataset.rawNumber || '';
+    const whatsapp = document.getElementById("business-whatsapp").dataset.rawNumber || '';
     const nombre_categoria = document.getElementById("business-category").value;
     const correo_electronico = document.getElementById("business-email").value;
     const contrasenia = document.getElementById("business-password").value;
@@ -75,6 +125,18 @@ async function registrarNegocio(event) {
         return;
     }
 
+    // Validación de número de teléfono
+    if (telefono_contacto.length !== 12 || !/^\d{2}\d{10}$/.test(telefono_contacto)) {
+        alert("El número de teléfono debe tener 12 dígitos (lada + 10 dígitos).");
+        return;
+    }
+
+    // Validación de WhatsApp
+    if (whatsapp.length !== 12 || !/^\d{2}\d{10}$/.test(whatsapp)) {
+        alert("El número de WhatsApp debe tener 12 dígitos (lada + 10 dígitos).");
+        return;
+    }
+
     try {
         // Obtener la categoría completa desde la API
         const categoria = await obtenerCategoria(nombre_categoria);
@@ -88,8 +150,8 @@ async function registrarNegocio(event) {
                 correo_electronico: correo_electronico,
                 contrasenia: contrasenia
             },
-            telefono_contacto : telefono_contacto,
-            whatsapp : whatsapp,
+            telefono_contacto: telefono_contacto, // Guardar el número sin formato
+            whatsapp: whatsapp, // Guardar el número sin formato
             pais: pais,
             estado: estado,
             ciudad: ciudad,
@@ -97,9 +159,9 @@ async function registrarNegocio(event) {
             colonia: colonia,
             calle: calle
         };
-        
-        console.log("Telefono de contacto:", telefono_contacto);
-        console.log("WhatsApp:", whatsapp);
+
+        console.log("Telefono de contacto (raw):", telefono_contacto);
+        console.log("WhatsApp (raw):", whatsapp);
 
         let URL = "http://localhost:8080/BIZZFIZZ/api/negocio/agregarNegocio";
         let response = await fetch(URL, {
@@ -151,7 +213,8 @@ async function cargarNegocios() {
             card.innerHTML = `
                 <h3>${negocio.nombre} ${negocio.apellido_paterno} ${negocio.apellido_materno}</h3>
                 <p><strong>ID:</strong> ${negocio.idCliente}</p>
-                <p><strong>Teléfono:</strong> ${negocio.telefono}</p>
+                <p><strong>Teléfono:</strong> ${negocio.telefono_contacto}</p>
+                <p><strong>WhatsApp:</strong> ${negocio.whatsapp}</p>
             `;
             negociosList.appendChild(card);
         });
@@ -159,4 +222,3 @@ async function cargarNegocios() {
         console.error("Error al cargar negocios:", error);
     }
 }
-
