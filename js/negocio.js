@@ -221,4 +221,6 @@ async function cargarNegocios() {
     } catch (error) {
         console.error("Error al cargar negocios:", error);
     }
+
+    
 }

@@ -961,4 +961,6 @@ function cargarDatosNegocio() {
                 todasLasPublicacionesDelNegocio = [];
             });
     }*/
+
+            
 });
