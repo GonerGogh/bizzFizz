@@ -2,14 +2,20 @@ package controller;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.InsertOneResult;
+
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
 import db.ConexionMongoDB;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Cliente;
+import model.Negocio;
 import model.Usuario;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -100,6 +106,36 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
         return listaClientes;
     }
 
+    
+    public Cliente obtenerClientePorNombreUsuario(String nombreUsuario) {
+    ConexionMongoDB conexion = new ConexionMongoDB();
+    MongoDatabase database = conexion.open();
+    MongoCollection<Cliente> collectionCliente = database.getCollection("cliente", Cliente.class); // Usa Negocio.class
+
+    Bson filtro = Filters.eq("usuario.nombre_usuario", nombreUsuario);
+    Cliente cliente = collectionCliente.find(filtro).first(); // Obtiene el primer documento como Negocio
+
+    conexion.close();
+    return cliente;
+}
    
+    public boolean actualizarFotoPerfilCliente(String nombreUsuario, String nuevaFotoPerfil) {
+        ConexionMongoDB conexion = new ConexionMongoDB();
+        MongoDatabase database = conexion.open();
+        MongoCollection<Cliente> collectionCliente = database.getCollection("cliente", Cliente.class);
+
+        Bson filtro = Filters.eq("usuario.nombre_usuario", nombreUsuario);
+        Bson actualizacion = Updates.set("foto_perfil", nuevaFotoPerfil); // "foto_perfil" debe coincidir con el campo en tu modelo Cliente
+
+        try {
+            collectionCliente.updateOne(filtro, actualizacion);
+            conexion.close();
+            return true; // Indica que la actualización fue exitosa
+        } catch (Exception e) {
+            System.err.println("Error al actualizar la foto de perfil del cliente: " + e.getMessage());
+            conexion.close();
+            return false; // Indica que hubo un error
+        }
+    }
     
 }

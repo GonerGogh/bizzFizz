@@ -1,16 +1,22 @@
 package rest;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import controller.ControllerCliente;
+import controller.ControllerNegocio;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import model.Cliente;
+import model.Negocio;
 
 /**
  *
@@ -60,6 +66,50 @@ public class RestCliente {
         }
     }
 
+    
+    @GET
+    @Path("getByUserName/{userName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerClientePorUserName(@PathParam("userName") String userName) {
+        ControllerCliente cm = new ControllerCliente();
+        Cliente cliente = cm.obtenerClientePorNombreUsuario(userName);
+
+        if (cliente == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"mensaje\": \"Cliente no encontrado\"}").build();
+        } else {
+            String json = gson.toJson(cliente);
+            return Response.ok(json).build();
+        }
+    }
+    
+   @PUT
+@Path("updateProfileImage/{userName}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Response actualizarFotoPerfil(@PathParam("userName") String userName, String nuevaFotoJson) {
+    ControllerCliente cm = new ControllerCliente();
+
+    try {
+        // Recibe el JSON y deserializa a un objeto (puedes crear una clase simple para esto)
+        // o extraer el valor directamente del String JSON
+        JsonObject jsonObject = gson.fromJson(nuevaFotoJson, JsonObject.class);
+        String nuevaFotoPerfilBase64 = jsonObject.get("fotoPerfilBase64").getAsString();
+
+        boolean resultado = cm.actualizarFotoPerfilCliente(userName, nuevaFotoPerfilBase64);
+
+        if (resultado) {
+            return Response.ok("{\"mensaje\": \"Foto de perfil actualizada correctamente\"}").build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"mensaje\": \"Error al actualizar la foto de perfil\"}").build();
+        }
+    } catch (Exception e) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity("{\"mensaje\": \"Error inesperado: " + e.getMessage() + "\"}")
+                .build();
+    }
+}
+  
+    
     /*@GET
     @Path("getCliente/{idCliente}")
     @Produces(MediaType.APPLICATION_JSON)

@@ -140,52 +140,68 @@ public boolean actualizarNegocioPorNombre(Negocio negocio) {
     ConexionMongoDB conexion = new ConexionMongoDB();
     MongoDatabase database = conexion.open();
     MongoCollection<Document> collectionNegocio = database.getCollection("negocio");
+    MongoCollection<Document> collectionPublicacion = database.getCollection("publicacion"); // Obtener la colección de publicaciones
 
-    Bson filtro = Filters.eq("nombre_negocio", negocio.getNombre_negocio());
-    List<Bson> updatesList = new ArrayList<>();
+    Bson filtroNegocio = Filters.eq("nombre_negocio", negocio.getNombre_negocio());
+    List<Bson> updatesListNegocio = new ArrayList<>();
+    List<Bson> updatesListPublicacion = new ArrayList<>(); // Lista para las actualizaciones de publicación
 
     if (negocio.getCategoria() != null) {
         if (negocio.getCategoria().getId_categoria() > 0) {
-            updatesList.add(Updates.set("categoria.id_categoria", negocio.getCategoria().getId_categoria()));
+            updatesListNegocio.add(Updates.set("categoria.id_categoria", negocio.getCategoria().getId_categoria()));
+            updatesListPublicacion.add(Updates.set("negocio.categoria.id_categoria", negocio.getCategoria().getId_categoria())); // Actualizar en publicaciones
         }
         if (negocio.getCategoria().getNombre_categoria() != null) {
-            updatesList.add(Updates.set("categoria.nombre_categoria", negocio.getCategoria().getNombre_categoria()));
+            updatesListNegocio.add(Updates.set("categoria.nombre_categoria", negocio.getCategoria().getNombre_categoria()));
+            updatesListPublicacion.add(Updates.set("negocio.categoria.nombre_categoria", negocio.getCategoria().getNombre_categoria())); // Actualizar en publicaciones
         }
     }
     if (negocio.getPais() != null) {
-        updatesList.add(Updates.set("pais", negocio.getPais()));
+        updatesListNegocio.add(Updates.set("pais", negocio.getPais()));
+        updatesListPublicacion.add(Updates.set("negocio.pais", negocio.getPais())); // Actualizar en publicaciones
     }
     if (negocio.getEstado() != null) {
-        updatesList.add(Updates.set("estado", negocio.getEstado()));
+        updatesListNegocio.add(Updates.set("estado", negocio.getEstado()));
+        updatesListPublicacion.add(Updates.set("negocio.estado", negocio.getEstado())); // Actualizar en publicaciones
     }
     if (negocio.getCiudad() != null) {
-        updatesList.add(Updates.set("ciudad", negocio.getCiudad()));
+        updatesListNegocio.add(Updates.set("ciudad", negocio.getCiudad()));
+        updatesListPublicacion.add(Updates.set("negocio.ciudad", negocio.getCiudad())); // Actualizar en publicaciones
     }
     if (negocio.getCodigo_postal() != null) {
-        updatesList.add(Updates.set("codigo_postal", negocio.getCodigo_postal()));
+        updatesListNegocio.add(Updates.set("codigo_postal", negocio.getCodigo_postal()));
+        updatesListPublicacion.add(Updates.set("negocio.codigo_postal", negocio.getCodigo_postal())); // Actualizar en publicaciones
     }
     if (negocio.getCalle() != null) {
-        updatesList.add(Updates.set("calle", negocio.getCalle()));
+        updatesListNegocio.add(Updates.set("calle", negocio.getCalle()));
+        updatesListPublicacion.add(Updates.set("negocio.calle", negocio.getCalle())); // Actualizar en publicaciones
     }
     if (negocio.getColonia() != null) {
-        updatesList.add(Updates.set("colonia", negocio.getColonia()));
+        updatesListNegocio.add(Updates.set("colonia", negocio.getColonia()));
+        updatesListPublicacion.add(Updates.set("negocio.colonia", negocio.getColonia())); // Actualizar en publicaciones
     }
     if (negocio.getTelefono_contacto() != null) {
-        updatesList.add(Updates.set("telefono_contacto", negocio.getTelefono_contacto()));
+        updatesListNegocio.add(Updates.set("telefono_contacto", negocio.getTelefono_contacto()));
+        updatesListPublicacion.add(Updates.set("negocio.telefono_contacto", negocio.getTelefono_contacto())); // Actualizar en publicaciones
     }
     if (negocio.getWhatsapp() != null) {
-        updatesList.add(Updates.set("whatsapp", negocio.getWhatsapp()));
+        updatesListNegocio.add(Updates.set("whatsapp", negocio.getWhatsapp()));
+        updatesListPublicacion.add(Updates.set("negocio.whatsapp", negocio.getWhatsapp())); // Actualizar en publicaciones
     }
     if (negocio.getFoto_perfil() != null) {
-        updatesList.add(Updates.set("foto_perfil", negocio.getFoto_perfil()));
+        updatesListNegocio.add(Updates.set("foto_perfil", negocio.getFoto_perfil()));
+        updatesListPublicacion.add(Updates.set("negocio.foto_perfil", negocio.getFoto_perfil())); // Actualizar en publicaciones
     }
 
-    Bson actualizaciones = Updates.combine(updatesList);
+    Bson actualizacionesNegocio = Updates.combine(updatesListNegocio);
+    Bson actualizacionesPublicacion = Updates.combine(updatesListPublicacion);
 
-    UpdateResult resultado = collectionNegocio.updateOne(filtro, actualizaciones);
+    UpdateResult resultadoNegocio = collectionNegocio.updateOne(filtroNegocio, actualizacionesNegocio);
+    UpdateResult resultadoPublicacion = collectionPublicacion.updateMany(Filters.eq("negocio.nombre_negocio", negocio.getNombre_negocio()), actualizacionesPublicacion);
 
     conexion.close();
-    return resultado.getModifiedCount() > 0;
+    // Considera si quieres retornar true solo si ambas actualizaciones fueron exitosas
+    return resultadoNegocio.getModifiedCount() > 0 || resultadoPublicacion.getModifiedCount() > 0;
 }
 
 
