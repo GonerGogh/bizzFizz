@@ -4,6 +4,7 @@ package controller;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
@@ -189,20 +190,77 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
         conexion.close();
         return listaPublicaciones;
     }
-    public List<Publicacion> obtenerPublicacionesPorCategoria(String nombreCategoria) {
+    
+    
+    public List<Publicacion> obtenerPublicacionActiva() {
+        ConexionMongoDB conexion = new ConexionMongoDB();
+        MongoDatabase database = conexion.open();
+        MongoCollection<Publicacion> collection = database.getCollection("publicacion", Publicacion.class);
+
+        List<Publicacion> listaPublicaciones = new ArrayList<>();
+        // Agrega este filtro para obtener solo las publicaciones activas
+        Bson filtro = Filters.eq("activo", true);
+        // Agrega esta línea para ordenar por el campo "reaccion" de forma descendente
+        Bson sort = Sorts.descending("reaccion");
+        collection.find(filtro).sort(sort).into(listaPublicaciones);
+
+        conexion.close();
+        return listaPublicaciones;
+    }
+    
+    
+    public boolean actualizarContadorReaccionPublicacion(int id_publicacion, boolean agregar) {
     ConexionMongoDB conexion = new ConexionMongoDB();
     MongoDatabase database = conexion.open();
-    MongoCollection<Document> collection = database.getCollection("publicacion");
+    MongoCollection<Document> collectionPublicacion = database.getCollection("publicacion");
+
+    // Crear el filtro para encontrar la publicación por su ID
+    Bson filtro = Filters.eq("id_publicacion", id_publicacion);
+
+    // Crear la actualización para incrementar o decrementar el contador de reacciones
+    Bson actualizacion;
+    if (agregar) {
+        actualizacion = Updates.inc("reaccion", 1); // Incrementa el campo "reaccion" en 1
+    } else {
+        actualizacion = Updates.inc("reaccion", -1); // Decrementa el campo "reaccion" en 1
+    }
+
+    try {
+        UpdateResult resultado = collectionPublicacion.updateOne(filtro, actualizacion);
+        return resultado.getModifiedCount() > 0; // Devuelve true si se modificó al menos un documento
+    } catch (Exception e) {
+        System.err.println("Error al actualizar el contador de reacción de la publicación: " + e.getMessage());
+        return false; // Indica que hubo un error
+    } finally {
+        conexion.close(); // Asegúrate de cerrar la conexión en el bloque finally
+    }
+}
     
+    
+     public List<Publicacion> obtenerPublicacionesPorCategoria(String nombreCategoria) {
+    ConexionMongoDB conexion = new ConexionMongoDB();
+    MongoDatabase database = conexion.open();
+    MongoCollection<Publicacion> collection = database.getCollection("publicacion", Publicacion.class);
+
     // Crear el filtro para encontrar publicaciones por nombre de categoría
-    Bson filtro = Filters.eq("negocio.categoria.nombre_categoria", nombreCategoria);
-    
+    Bson filtroCategoria = Filters.eq("negocio.categoria.nombre_categoria", nombreCategoria);
+
+    // Crear el filtro para obtener solo las publicaciones activas
+    Bson filtroActivo = Filters.eq("activo", true);
+
+    // Crear un documento Bson que contenga ambas condiciones
+    Bson filtroCombinado = Filters.and(filtroCategoria, filtroActivo);
+
+    // Agrega esta línea para ordenar por el campo "reaccion" de forma descendente
+    Bson sort = Sorts.descending("reaccion");
+
     List<Publicacion> listaPublicaciones = new ArrayList<>();
-    collection.find(filtro, Publicacion.class).into(listaPublicaciones);
-    
+    collection.find(filtroCombinado).sort(sort).into(listaPublicaciones);
+
     conexion.close();
     return listaPublicaciones;
 }
-
-
+    
+    
+    
 }
