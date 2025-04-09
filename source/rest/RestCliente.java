@@ -108,6 +108,28 @@ public Response actualizarFotoPerfil(@PathParam("userName") String userName, Str
                 .build();
     }
 }
+
+    @DELETE
+    @Path("eliminarCliente/{nombreCliente}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response eliminarCliente(@PathParam("nombreCliente") String nombreCliente) {
+        ControllerCliente cm = new ControllerCliente();
+
+        try {
+            boolean resultado = cm.eliminarCliente(nombreCliente);
+
+            if (resultado) {
+                return Response.ok("{\"mensaje\": \"Cliente desactivado correctamente\"}").build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"mensaje\": \"No se encontró el cliente para desactivar con ese nombre\"}").build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"mensaje\": \"Error al desactivar el cliente: " + e.getMessage() + "\"}")
+                    .build();
+        }
+    }
   
     
     /*@GET
