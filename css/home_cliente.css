@@ -1,4 +1,118 @@
 /* Variables de colores */
+
+
+/* Estilos adicionales para las publicaciones */
+        /*.publication-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .publication-header {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+
+        .publication-title {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .business-name {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .publication-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .publication-image {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .publication-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .publication-details {
+            flex-grow: 1;
+        }
+
+        .publication-description {
+            margin-top: 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .publication-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .publication-location i,
+        .publication-price span {
+            margin-right: 5px;
+        }
+
+        .publication-actions {
+            display: flex;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            justify-content: flex-end;
+        }
+
+        .action-button {
+            background: none;
+            border: 1px solid #007bff;
+            color: #007bff;
+            padding: 8px 12px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .action-button.favorite {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .action-button.favorite:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .publications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }*/
+
 :root {
     --primary-color: #8B386D;
     --secondary-color: #111D3D;
@@ -19,20 +133,25 @@
 
 .filtro-container {
   position: relative;
-  display: inline-block; 
+  display: inline-block;
 }
 
-
-#filtro {
-  background: none;
+#filtro { /* Aplicamos el estilo al ID del botón */
+  background: transparent; /* Cambiamos 'none' a 'transparent' */
   border: none;
   padding: 8px;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.filtro { /* Estilos para la imagen dentro del botón (si necesitas algún estilo específico) */
+  width: 100%; /* Asegura que la imagen ocupe todo el botón */
+  height: 100%;
+  object-fit: contain; /* Ajusta cómo se escala la imagen dentro del botón */
 }
 
 #menu-items {
