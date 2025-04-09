@@ -9,7 +9,9 @@ import controller.ControllerPublicacion;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -29,6 +31,22 @@ public class RestPublicacion {
     public Response obtenerTodosLasPublicaciones() {
         ControllerPublicacion cm = new ControllerPublicacion();
         List<Publicacion> publicaciones = cm.obtenerPublicacion();
+
+        if (publicaciones.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).entity("{\"mensaje\": \"No hay publicaciones registrados\"}").build();
+        } else {
+            Gson gson = new Gson();
+            String json = gson.toJson(publicaciones);
+            return Response.ok(json).build();
+        }
+    }
+    
+    @GET
+    @Path("getAllPublicacionActiva")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerTodosLasPublicacionesActivas() {
+        ControllerPublicacion cm = new ControllerPublicacion();
+        List<Publicacion> publicaciones = cm.obtenerPublicacionActiva();
 
         if (publicaciones.isEmpty()) {
             return Response.status(Response.Status.NO_CONTENT).entity("{\"mensaje\": \"No hay publicaciones registrados\"}").build();
@@ -89,23 +107,44 @@ public class RestPublicacion {
                     .build();
         }
     }
+    
+    
+    @PUT
+@Path("reaccionar/{id}/{accion}") // Agregamos un nuevo parámetro para la acción
+@Produces(MediaType.APPLICATION_JSON)
+public Response reaccionarPublicacion(@PathParam("id") int id_publicacion, @PathParam("accion") String accion) {
+    ControllerPublicacion cm = new ControllerPublicacion();
+    boolean resultado;
 
-
-        
-    @GET
-    @Path("getByCategoria/{nombreCategoria}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerPublicacionesPorCategoria(@jakarta.ws.rs.PathParam("nombreCategoria") String nombreCategoria) {
-        ControllerPublicacion cm = new ControllerPublicacion();
-        List<Publicacion> publicaciones = cm.obtenerPublicacionesPorCategoria(nombreCategoria);
-        if (publicaciones.isEmpty()) {
-            return Response.status(Response.Status.NO_CONTENT)
-                    .entity("{\"mensaje\": \"No hay publicaciones para la categoría " + nombreCategoria + "\"}")
-                    .build();
-        } else {
-            Gson gson = new Gson();
-            String json = gson.toJson(publicaciones);
-            return Response.ok(json).build();
-        }
+    if ("agregar".equals(accion)) {
+        resultado = cm.actualizarContadorReaccionPublicacion(id_publicacion, true); // true para agregar
+    } else if ("quitar".equals(accion)) {
+        resultado = cm.actualizarContadorReaccionPublicacion(id_publicacion, false); // false para quitar
+    } else {
+        return Response.status(Response.Status.BAD_REQUEST).entity("{\"mensaje\": \"Acción no válida\"}").build();
     }
+
+    if (resultado) {
+        return Response.status(Response.Status.OK).entity("{\"mensaje\": \"Reacción " + (accion.equals("agregar") ? "agregada" : "quitada") + " a la publicación con ID: " + id_publicacion + "\"}").build();
+    } else {
+        return Response.status(Response.Status.NOT_FOUND).entity("{\"mensaje\": \"No se encontró la publicación con ID: " + id_publicacion + " o no se pudo actualizar la reacción\"}").build();
+    }
+}
+
+    @GET
+     @Path("getByCategoria/{nombreCategoria}")
+     @Produces(MediaType.APPLICATION_JSON)
+     public Response obtenerPublicacionesPorCategoria(@jakarta.ws.rs.PathParam("nombreCategoria") String nombreCategoria) {
+         ControllerPublicacion cm = new ControllerPublicacion();
+         List<Publicacion> publicaciones = cm.obtenerPublicacionesPorCategoria(nombreCategoria);
+         if (publicaciones.isEmpty()) {
+             return Response.status(Response.Status.NO_CONTENT)
+                     .entity("{\"mensaje\": \"No hay publicaciones para la categoría " + nombreCategoria + "\"}")
+                     .build();
+         } else {
+             Gson gson = new Gson();
+             String json = gson.toJson(publicaciones);
+             return Response.ok(json).build();
+         }
+     }
 }
