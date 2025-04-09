@@ -14,6 +14,91 @@
     --hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
 }
 
+
+/*Estilos de filtro*/
+
+.filtro-container {
+  position: relative;
+  display: inline-block; 
+}
+
+
+#filtro {
+  background: none;
+  border: none;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#menu-items {
+  display: none;               
+  position: absolute;          
+  top: calc(100% + 5px);     
+  right: 0;                    
+  width: 200px;                 
+  background-color: #8B386D;    
+  padding: 8px 0;            
+  margin: 0;
+  list-style: none;             
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+
+#menu-items li {
+  display: block;
+  padding: 6px 16px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: background-color 0.2s;
+}
+
+
+#menu-items li::before {
+  content: "• ";
+  color: #fff;
+}
+
+
+#menu-items li + li {
+  margin-top: 4px;
+}
+
+
+#menu-items li:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+
+
+nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 0 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  color: white; /* Aseguramos que el texto sea visible */
+}
+
+nav ul li:hover {
+  background-color: rgba(255, 255, 255, 0.2); /*Efecto hover translúcido */
+}
+
+
+
 /* Reset y configuración general */
 * {
     box-sizing: border-box;
@@ -54,20 +139,6 @@ header {
     gap: 20px;
 }
 
-.menu-button {
-    background-color: transparent;
-    border: none;
-    color: var(--light-color);
-    font-size: 1.3rem;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.menu-button:hover {
-    background-color: var(--accent-color);
-}
 
 .search-container {
     display: flex;
