@@ -7,12 +7,12 @@ import com.mongodb.client.result.InsertOneResult;
 
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import db.ConexionMongoDB;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Cliente;
-import model.Negocio;
 import model.Usuario;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -135,6 +135,32 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
             System.err.println("Error al actualizar la foto de perfil del cliente: " + e.getMessage());
             conexion.close();
             return false; // Indica que hubo un error
+        }
+    }
+    
+    
+    public boolean eliminarCliente(String nombreCliente) {
+        ConexionMongoDB conexion = new ConexionMongoDB();
+        MongoDatabase database = conexion.open();
+        MongoCollection<Document> collectionUsuario = database.getCollection("usuario");
+        MongoCollection<Document> collectionCliente = database.getCollection("cliente");
+
+        try {
+            // 1. Actualizar el 'activo' del usuario asociado en la colección 'usuario'
+            Bson filtroUsuario = Filters.eq("nombre_usuario", nombreCliente);
+            Bson actualizacionUsuario = Updates.set("activo", false);
+            UpdateResult resultadoUsuario = collectionUsuario.updateOne(filtroUsuario, actualizacionUsuario);
+
+            // 2. Actualizar el 'activo' del cliente en la colección 'cliente'
+            Bson filtroCliente = Filters.eq("usuario.nombre_usuario", nombreCliente);
+            Bson actualizacionCliente = Updates.set("usuario.activo", false); // Actualiza el 'activo' dentro del subdocumento 'usuario'
+            UpdateResult resultadoCliente = collectionCliente.updateOne(filtroCliente, actualizacionCliente);
+
+            // Consideramos exitoso si al menos un documento fue modificado en ambas colecciones
+            return resultadoUsuario.getModifiedCount() > 0 && resultadoCliente.getModifiedCount() > 0;
+
+        } finally {
+            conexion.close();
         }
     }
     
