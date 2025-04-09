@@ -65,6 +65,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Elementos del DOM relacionados con los números de contacto en el sidebar
     const numeroContactoInput = document.getElementById('numeroContacto');
     const numeroWhatsAppInput = document.getElementById('numeroWhatsApp');
+    
+    
+    // **Validador de sesión de cliente**
+    function verificarSesionCliente() {
+        const userName = localStorage.getItem('userName');
+        const userType = localStorage.getItem('userType');
+
+        if (!userName || userType !== 'negocio') {
+            // Si no hay userName o el userType no es "cliente",
+            // redirigir al usuario a la página de inicio de sesión (o a donde sea apropiado)
+            console.warn('Sesión no válida para negocio. Redirigiendo...');
+            window.location.href = 'index.html'; // Reemplaza 'index.html' con tu página de inicio de sesión
+            return false; // Indica que la sesión no es válida
+        }
+        return true; // Indica que la sesión es válida para un cliente
+    }
 
 
     function actualizarBotonLimpiar() {
@@ -75,8 +91,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    
+    
+     // Llamar al validador de sesión al cargar la página
+    if (verificarSesionCliente()) {
+        // Si la sesión es válida para un cliente, proceder a cargar los datos
+        inicializarApp();
+    }
+    
     // Inicialización
-    inicializarApp();
+    //inicializarApp();
 
     function inicializarApp() {
         cargarPublicaciones(); // Cargar todas las publicaciones del negocio al inicio
@@ -473,7 +497,7 @@ function cargarDatosNegocio() {
         return `+${number.substring(0, 2)} ${number.substring(2, 5)}-${number.substring(5, 8)}-${number.substring(8, 12)}`;
     }
 
-    // Guardar cambios del perfil (modificado para usar el rawNumber)
+    // Guardar cambios del perfil (modificado para usar el rawNumber y hacer teléfonos no requeridos)
     function guardarCambiosNegocio() {
         const nombreNegocio = localStorage.getItem('userName');
         if (!nombreNegocio) {
@@ -502,15 +526,17 @@ function cargarDatosNegocio() {
                 const telefono_contacto = document.getElementById('numeroContacto').dataset.rawNumber || '';
                 const whatsapp = document.getElementById('numeroWhatsApp').dataset.rawNumber || '';
 
-                // Validación de número de teléfono al guardar
-                if (telefono_contacto.length !== 12 || !/^\d{2}\d{10}$/.test(telefono_contacto)) {
+                // **MODIFICACIÓN:** Validar teléfono solo si tiene valor
+                if (telefono_contacto && telefono_contacto.length > 0 && (telefono_contacto.length !== 12 || !/^\d{2}\d{10}$/.test(telefono_contacto))) {
                     AlertController.showError("El número de contacto debe tener 12 dígitos (lada + 10 dígitos).");
+                    ocultarSidebarPerfil();
                     return;
                 }
 
-                // Validación de WhatsApp al guardar
-                if (whatsapp.length !== 12 || !/^\d{2}\d{10}$/.test(whatsapp)) {
+                // **MODIFICACIÓN:** Validar WhatsApp solo si tiene valor
+                if (whatsapp && whatsapp.length > 0 && (whatsapp.length !== 12 || !/^\d{2}\d{10}$/.test(whatsapp))) {
                     AlertController.showError("El número de WhatsApp debe tener 12 dígitos (lada + 10 dígitos).");
+                    ocultarSidebarPerfil();
                     return;
                 }
 
@@ -526,8 +552,8 @@ function cargarDatosNegocio() {
                     codigo_postal: document.getElementById('codigoPostal').value,
                     calle: document.getElementById('calle').value,
                     colonia: document.getElementById('colonia').value,
-                    telefono_contacto: telefono_contacto, // Usar el rawNumber para guardar
-                    whatsapp: whatsapp, // Usar el rawNumber para guardar
+                    telefono_contacto: telefono_contacto || null, // Guardar null si está vacío
+                    whatsapp: whatsapp || null, // Guardar null si está vacío
                 };
 
                 // Solo añadir la foto de perfil si se ha seleccionado una nueva
@@ -555,12 +581,14 @@ function cargarDatosNegocio() {
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    AlertController.showError("Error al actualizar los datos del negocio: " + error.message);
+                    AlertController.showError("Actualiza por lo menos un dato del negocio" ); //"Error al actualizar los datos del negocio" + error.message
+                    ocultarSidebarPerfil();
                 });
             })
             .catch(error => {
                 console.error('Error:', error);
                 AlertController.showError("Error al obtener las categorías para guardar.");
+                ocultarSidebarPerfil();
             });
     }
 
