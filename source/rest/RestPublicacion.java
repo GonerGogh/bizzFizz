@@ -89,4 +89,23 @@ public class RestPublicacion {
                     .build();
         }
     }
+
+
+        
+    @GET
+    @Path("getByCategoria/{nombreCategoria}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerPublicacionesPorCategoria(@jakarta.ws.rs.PathParam("nombreCategoria") String nombreCategoria) {
+        ControllerPublicacion cm = new ControllerPublicacion();
+        List<Publicacion> publicaciones = cm.obtenerPublicacionesPorCategoria(nombreCategoria);
+        if (publicaciones.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT)
+                    .entity("{\"mensaje\": \"No hay publicaciones para la categoría " + nombreCategoria + "\"}")
+                    .build();
+        } else {
+            Gson gson = new Gson();
+            String json = gson.toJson(publicaciones);
+            return Response.ok(json).build();
+        }
+    }
 }

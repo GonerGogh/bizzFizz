@@ -189,5 +189,20 @@ private int obtenerUltimoId(MongoCollection<Document> collection) {
         conexion.close();
         return listaPublicaciones;
     }
+    public List<Publicacion> obtenerPublicacionesPorCategoria(String nombreCategoria) {
+    ConexionMongoDB conexion = new ConexionMongoDB();
+    MongoDatabase database = conexion.open();
+    MongoCollection<Document> collection = database.getCollection("publicacion");
     
+    // Crear el filtro para encontrar publicaciones por nombre de categoría
+    Bson filtro = Filters.eq("negocio.categoria.nombre_categoria", nombreCategoria);
+    
+    List<Publicacion> listaPublicaciones = new ArrayList<>();
+    collection.find(filtro, Publicacion.class).into(listaPublicaciones);
+    
+    conexion.close();
+    return listaPublicaciones;
+}
+
+
 }
